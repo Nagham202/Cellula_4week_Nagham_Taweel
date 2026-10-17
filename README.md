@@ -42,8 +42,13 @@ memory (preferences, recent turns, last code) is passed to every LLM call
 | Intent classifier: 20 messages, 10 per label, incl. 2 in Arabic | **20/20** |
 | Relevance judge: 17 requests (list/string problems vs. Flask, PyTorch, databases, GUIs…) | **17/17** |
 | Manual end-to-end runs in the app | explain ✔, generate + run ✔, CNN → not relevant → I taught it → asked again → relevant ✔, follow-ups with memory ✔ |
+| **pass@1** on the 20 held-out HumanEval problems (retrieve → judge → generate, checked with the official tests) | **17/20 = 85%** |
 
-I also wrote `evaluation/eval_pass_at_1.py` (pass@1 on the 20 held-out problems) and `evaluation/run_scenarios.py` (4 scenarios with automatic checks). I haven't run them yet, because I reached Groq's daily token limit.
+What the 85% means: every time the assistant actually wrote code, the code passed (17/17). All 3 misses (`compare_one`, `digitSum`, `valid_date`) happened because the judge decided nothing in the knowledge base was close enough and asked for help instead of writing code. That's the "don't guess" rule doing its job, a bit too carefully. No held-out problem was ever retrieved from Chroma, so the score isn't inflated by copying.
+
+I also wrote `evaluation/run_scenarios.py` (the 4 scenarios with automatic checks), but I haven't run it yet. I tested those scenarios by hand in the app instead.
+
+The full write-up with diagrams is in [Week4_Report.pdf](Week4_Report.pdf).
 
 To be honest about the numbers: the test sets are small, and a few classifier test messages are close to the examples in the prompt, so 100% is probably a bit optimistic.
 

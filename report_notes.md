@@ -131,4 +131,5 @@ same kind of problem", not "the exact same problem" (see Step 6).
 - `evaluation/eval_pass_at_1.py`: 20 held-out problems → request "Complete this Python function…" + prompt → retrieve → judge → generate → `extract_python_code` → official tests with the code runner. Not Relevant / no code count as failures. Also checks that no held-out problem is retrieved (leak check). Checked without tokens: harness passes the canonical solution.
 - `evaluation/run_scenarios.py`: 4 scenarios / 8 turns with automatic checks (route, trace contents, code runs); each scenario gets a fresh temporary memory; what scenario 3 teaches is removed afterwards so the test is repeatable.
 - README.md: architecture, setup, run, evaluation commands, structure, runner safety, limitations.
-- pass@1 and the scenario script are written but not run yet (Groq daily token limit). The 4 scenarios were tested by hand in the app instead.
+- **pass@1 = 17/20 (85%)** on the 20 held-out problems (took ~7 min because of the 8,000 tokens/min limit). Every generated solution passed (17/17); the 3 misses (HumanEval/137 compare_one, /66 digitSum, /124 valid_date) were the judge saying Not Relevant because Chroma had nothing close. Leak check: 0 held-out problems retrieved.
+- The scenario script is written but not run; the 4 scenarios were tested by hand in the app instead.
